@@ -21,6 +21,18 @@ let usedLetters;
 let mistakes;
 let hits;
 
+const drawHangMan = () => {
+  ctx.canvas.width = 120;
+  ctx.canvas.height = 160;
+  ctx.scale(20, 20);
+  ctx.clearReact(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#d95d39';
+  ctx.fillRect(0, 7, 4, 1);
+  ctx.fillRect(1, 0, 1, 8);
+  ctx.fillRect(2, 0, 3, 1);
+  ctx.fillRect(4, 1, 1, 1);
+}
+
 const startGame = () => {
   usedLetters = [];
   mistakes = [];
@@ -28,6 +40,9 @@ const startGame = () => {
   wordContainer.innerHTML = '';
   usedLettersElement.innerHTML = '';
   startButton.style.display = 'none';
+
+  drawHangMan();
+
 }
 
 startButton.addEventListener('click', startGame);
