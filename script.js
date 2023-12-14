@@ -38,6 +38,16 @@ const selectRandomWord = () => {
   selectedWord = word.split('');
 }
 
+const drawWord = () => {
+  selectedWord.forEach(letter => {
+    const letterElement = document.createElement('span');
+    letterElement.innerHTML = letter.toUpperCase();
+    letterElement.classList.add('letter');
+    letterElement.classList.add('hidden');
+    wordContainer.appendChild(letterElement);
+  });
+}
+
 const startGame = () => {
   usedLetters = [];
   mistakes = [];
@@ -48,6 +58,7 @@ const startGame = () => {
 
   drawHangMan();
   selectRandomWord();
+  drawWord();
 }
 
 startButton.addEventListener('click', startGame);
