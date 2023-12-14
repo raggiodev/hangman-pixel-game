@@ -33,6 +33,11 @@ const drawHangMan = () => {
   ctx.fillRect(4, 1, 1, 1);
 }
 
+const selectRandomWord = () => {
+  const word = words[Math.floor((Math.random() * words.length))].toUpperCase();
+  selectedWord = word.split('');
+}
+
 const startGame = () => {
   usedLetters = [];
   mistakes = [];
@@ -42,7 +47,7 @@ const startGame = () => {
   startButton.style.display = 'none';
 
   drawHangMan();
-
+  selectRandomWord();
 }
 
 startButton.addEventListener('click', startGame);
