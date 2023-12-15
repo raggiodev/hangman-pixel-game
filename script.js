@@ -10,10 +10,10 @@ ctx.canvas.height = 0;
 const bodyParts = [
   [4,2,1,1],
   [4,3,1,2],
-  [3,5,1,1],
-  [5,5,1,1],
   [3,3,1,1],
-  [5,3,1,1]
+  [5,3,1,1],
+  [3,5,1,1],
+  [5,5,1,1]
 ];
 
 let selectedWord;
@@ -25,7 +25,7 @@ const drawHangMan = () => {
   ctx.canvas.width = 120;
   ctx.canvas.height = 160;
   ctx.scale(20, 20);
-  ctx.clearReact(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#d95d39';
   ctx.fillRect(0, 7, 4, 1);
   ctx.fillRect(1, 0, 1, 8);
@@ -48,10 +48,61 @@ const drawWord = () => {
   });
 }
 
+const letterEvent = e => {
+  let newLetter = e.key.toUpperCase();
+  if (newLetter.match(/^[a-zñ]$/i) && !usedLetters.includes(newLetter)) {
+    letterInput(newLetter);
+  };
+}
+
+const letterInput = letter => {
+  if (selectedWord.includes(letter)) {
+    correctLetter(letter);
+  }
+  else {
+    wrongLetter();
+  }
+  addLetter(letter);
+  usedLetters.push(letter);
+}
+
+const correctLetter = letter => {
+  const { children } = wordContainer;
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].innerHTML === letter) {
+      children[i].classList.toggle('hidden');
+      hits++;
+    }
+  }
+  if (hits === selectedWord.length) endGame();
+}
+
+const endGame = () => {
+  document.removeEventListener('keydown', letterEvent);
+  startButton.style.display = 'block';
+}
+
+const wrongLetter = () => {
+  addBodyPart(bodyParts[mistakes]);
+  mistakes++;
+  if (mistakes === bodyParts.length) endGame();
+}
+
+const addBodyPart = bodyPart => {
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(...bodyPart);
+}
+
+const addLetter = () => {
+  const letterElement = document.createElement('span');
+  letterElement.innerHTML = letter.toUpperCase();
+  usedLettersElement.appendChild(letterElement);
+}
+
 const startGame = () => {
   usedLetters = [];
-  mistakes = [];
-  hits = [];
+  mistakes = 0;
+  hits = 0;
   wordContainer.innerHTML = '';
   usedLettersElement.innerHTML = '';
   startButton.style.display = 'none';
@@ -59,6 +110,8 @@ const startGame = () => {
   drawHangMan();
   selectRandomWord();
   drawWord();
+
+  document.addEventListener('keydown', letterEvent);
 }
 
 startButton.addEventListener('click', startGame);
